@@ -21,7 +21,7 @@ export default function LiveStrip() {
         <button
           type="button"
           onClick={() => scan(true)}
-          className="font-mono text-xs underline underline-offset-4 hover:text-accent"
+          className="shrink-0 whitespace-nowrap pl-3 font-mono text-xs underline underline-offset-4 hover:text-accent"
         >
           Run again
         </button>

@@ -45,21 +45,30 @@ export function pct(sorted: number[], p: number) {
 
 /** One untimed warm-up call (DNS and TLS), then SAMPLES timed calls in sequence. */
 export async function bench(url: string, sol = false): Promise<Stat> {
-  await ping(url, sol)
+  const warm = await ping(url, sol)
   const ms: number[] = []
   let block: number | null = null
   let fails = 0
   let err: string | null = null
+  let streak = warm.ms === null ? 1 : 0
   for (let i = 0; i < SAMPLES; i++) {
+    // Two failures in a row means the endpoint is down. Stop instead of waiting out six more timeouts.
+    if (streak >= 2) {
+      fails += SAMPLES - i
+      break
+    }
     const r = await ping(url, sol)
     if (r.ms === null) {
       fails++
+      streak++
       err = r.err
     } else {
+      streak = 0
       ms.push(r.ms)
       block = r.block
     }
   }
+  if (fails > 0 && err === null) err = warm.err
   ms.sort((a, b) => a - b)
   return { p50: ms.length ? pct(ms, 50) : null, p95: ms.length ? pct(ms, 95) : null, block, fails, err }
 }

@@ -109,8 +109,8 @@ export default function Generator() {
   const text = tab === 'yml' ? yml : tab === 'run' ? run : viem
 
   return (
-    <div className="mx-auto grid max-w-page gap-12 px-5 py-12 sm:px-8 lg:grid-cols-12">
-      <div className="lg:col-span-4">
+    <div className="mx-auto grid max-w-page grid-cols-1 gap-12 px-5 py-12 sm:px-8 lg:grid-cols-12">
+      <div className="min-w-0 lg:col-span-4">
         <div className="space-y-7 lg:sticky lg:top-24">
           <fieldset>
             <legend className="label-mono">Chains</legend>
@@ -138,7 +138,7 @@ export default function Generator() {
         </div>
       </div>
 
-      <div className="lg:col-span-8">
+      <div className="min-w-0 lg:col-span-8">
         <div className="flex items-center justify-between border-b border-ink">
           <div className="flex gap-6 overflow-x-auto text-sm" role="tablist" aria-label="Generated files">
             {TABS.map((t) => (

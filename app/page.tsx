@@ -43,8 +43,8 @@ export default function Home() {
     <>
       {/* Hero */}
       <section className="border-b border-rule">
-        <div className="mx-auto grid max-w-page gap-12 px-5 pb-14 pt-12 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-7">
+        <div className="mx-auto grid max-w-page grid-cols-1 gap-12 px-5 pb-14 pt-12 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-12 lg:gap-10">
+          <div className="min-w-0 lg:col-span-7">
             <p className="rise label-mono">Tools for dRPC NodeCloud and NodeCore</p>
             <h1
               className="rise mt-5 text-4xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-[4.25rem]"
@@ -66,7 +66,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="rise lg:col-span-5" style={delay('.36s')}>
+          <div className="rise min-w-0 lg:col-span-5" style={delay('.36s')}>
             <LiveStrip />
           </div>
         </div>
@@ -100,8 +100,8 @@ export default function Home() {
 
       {/* Sample output */}
       <section>
-        <div className="mx-auto grid max-w-page gap-10 px-5 pt-24 sm:px-8 lg:grid-cols-12">
-          <Reveal className="lg:col-span-5">
+        <div className="mx-auto grid max-w-page grid-cols-1 gap-10 px-5 pt-24 sm:px-8 lg:grid-cols-12">
+          <Reveal className="min-w-0 lg:col-span-5">
             <p className="label-mono">Sample output</p>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">What a generated config looks like.</h2>
             <p className="mt-5 max-w-md leading-relaxed text-mute">
@@ -112,7 +112,7 @@ export default function Home() {
               Open the generator
             </Link>
           </Reveal>
-          <Reveal className="lg:col-span-7" d={0.08}>
+          <Reveal className="min-w-0 lg:col-span-7" d={0.08}>
             <pre className="overflow-x-auto bg-ink p-5 font-mono text-xs leading-relaxed text-paper sm:p-6 sm:text-[13px]">{SAMPLE}</pre>
           </Reveal>
         </div>

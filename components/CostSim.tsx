@@ -9,7 +9,10 @@ const WORK = {
 } as const
 type Key = keyof typeof WORK
 
-const money = (n: number) => `$${n.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+const money = (n: number) =>
+  Number.isInteger(n)
+    ? `$${n.toLocaleString()}`
+    : `$${n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
 export default function CostSim() {
   const [vol, setVol] = useState(25)
@@ -44,8 +47,8 @@ export default function CostSim() {
   else verdict = `On this workload ${cheapest.name} costs ${money(-diff)} less per month than dRPC Growth.`
 
   return (
-    <div className="mx-auto grid max-w-page gap-12 px-5 py-12 sm:px-8 lg:grid-cols-12">
-      <div className="lg:col-span-4">
+    <div className="mx-auto grid max-w-page grid-cols-1 gap-12 px-5 py-12 sm:px-8 lg:grid-cols-12">
+      <div className="min-w-0 lg:col-span-4">
         <div className="space-y-7 lg:sticky lg:top-24">
           <fieldset>
             <legend className="label-mono">Workload</legend>
@@ -67,12 +70,12 @@ export default function CostSim() {
             <label htmlFor="rps" className="label-mono">
               Peak RPS <span className="text-ink">{rps.toLocaleString()}</span>
             </label>
-            <input id="rps" type="range" min={1} max={10000} step={10} value={rps} onChange={(e) => setRps(+e.target.value)} className="mt-2" />
+            <input id="rps" type="range" min={10} max={10000} step={10} value={rps} onChange={(e) => setRps(+e.target.value)} className="mt-2" />
           </div>
         </div>
       </div>
 
-      <div className="lg:col-span-8">
+      <div className="min-w-0 lg:col-span-8">
         <div className="mb-8 border-l-4 border-ink bg-card px-5 py-4">
           <p className="font-semibold">Result for {vol}M requests a month</p>
           <p className="mt-1 text-sm">{verdict}</p>
@@ -83,7 +86,7 @@ export default function CostSim() {
             <li key={r.name} className="border-b border-rule py-5">
               <div className="flex items-baseline justify-between gap-4">
                 <p className={r.mine ? 'font-semibold' : ''}>{r.name}</p>
-                <p className={`font-mono text-sm tabular-nums ${r.ok ? '' : 'text-bad'}`}>{money(r.cost)}/mo</p>
+                <p className={`font-mono text-sm tabular-nums ${r.ok ? '' : 'text-bad'}`}>{r.ok ? `${money(r.cost)}/mo` : 'Does not fit'}</p>
               </div>
               <div className="mt-3 h-2 bg-rule/60">
                 <div className={`bar-grow h-2 ${r.mine ? 'bg-accent' : 'bg-ink'}`} style={{ width: `${(r.cost / max) * 100}%` }} />

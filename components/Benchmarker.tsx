@@ -28,6 +28,14 @@ export default function Benchmarker() {
   const [lags, setLags] = useState<Record<string, number | null>>({})
 
   const chain = CHAINS.find((c) => c.slug === chainSlug)!
+
+  // Changing the chain or either URL makes the old results describe a different setup, so clear them.
+  const reset = () => {
+    setRes({})
+    setLags({})
+    setRan(false)
+    setError(null)
+  }
   const hasPrimary = primary.trim() !== ''
   const hasBackup = backup.trim() !== ''
 
@@ -103,13 +111,13 @@ export default function Benchmarker() {
   const toneCls = { ok: 'border-ok text-ok', warn: 'border-warn text-warn', bad: 'border-bad text-bad' }
 
   return (
-    <div className="mx-auto grid max-w-page gap-12 px-5 py-12 sm:px-8 lg:grid-cols-12">
+    <div className="mx-auto grid max-w-page grid-cols-1 gap-12 px-5 py-12 sm:px-8 lg:grid-cols-12">
       {/* Controls */}
-      <div className="lg:col-span-4">
+      <div className="min-w-0 lg:col-span-4">
         <div className="space-y-6 lg:sticky lg:top-24">
           <div>
             <label htmlFor="chain" className="label-mono">Chain for your routes</label>
-            <select id="chain" className="field mt-2" value={chainSlug} onChange={(e) => setChainSlug(e.target.value)}>
+            <select id="chain" className="field mt-2" value={chainSlug} onChange={(e) => { setChainSlug(e.target.value); reset() }}>
               {CHAINS.map((c) => (
                 <option key={c.slug} value={c.slug}>{c.label}</option>
               ))}
@@ -117,12 +125,12 @@ export default function Benchmarker() {
           </div>
           <div>
             <label htmlFor="primary" className="label-mono">Primary RPC URL</label>
-            <input id="primary" className="field mt-2" value={primary} onChange={(e) => setPrimary(e.target.value)} placeholder="https://lb.drpc.live/ethereum/KEY" autoComplete="off" spellCheck={false} />
+            <input id="primary" className="field mt-2" value={primary} onChange={(e) => { setPrimary(e.target.value); reset() }} placeholder="https://lb.drpc.live/ethereum/KEY" autoComplete="off" spellCheck={false} />
             <p className="mt-2 text-xs text-mute">Leave blank to treat dRPC public {chain.label} as the primary.</p>
           </div>
           <div>
             <label htmlFor="backup" className="label-mono">Backup RPC URL (optional)</label>
-            <input id="backup" className="field mt-2" value={backup} onChange={(e) => setBackup(e.target.value)} placeholder="https://your-backup.example" autoComplete="off" spellCheck={false} />
+            <input id="backup" className="field mt-2" value={backup} onChange={(e) => { setBackup(e.target.value); reset() }} placeholder="https://your-backup.example" autoComplete="off" spellCheck={false} />
           </div>
           <div>
             <label htmlFor="threshold" className="label-mono">
@@ -141,7 +149,7 @@ export default function Benchmarker() {
       </div>
 
       {/* Results */}
-      <div className="lg:col-span-8">
+      <div className="min-w-0 lg:col-span-8">
         {verdict ? (
           <div className={`mb-8 border-l-4 bg-card px-5 py-4 ${toneCls[verdict.tone]}`} role="status">
             <p className="font-semibold">{verdict.head}</p>
