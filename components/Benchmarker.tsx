@@ -106,7 +106,7 @@ export default function Benchmarker() {
     }
   }
 
-  const all = Object.values(res)
+  const all: Stat[] = Object.values(res)
   const scaleMax = Math.max(threshold * 1.5, 200, ...all.map((s) => s.p95 ?? 0))
   const toneCls = { ok: 'border-ok text-ok', warn: 'border-warn text-warn', bad: 'border-bad text-bad' }
 
