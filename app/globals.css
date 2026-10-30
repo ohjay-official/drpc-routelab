@@ -1,7 +1,125 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html { color-scheme: dark; }
-body { background: #0d1015; color: #e6e9ef; }
-input[type=range] { accent-color: #6ea8ff; width: 100%; }
-:focus-visible { outline: 2px solid #6ea8ff; outline-offset: 2px; }
+
+:root { color-scheme: light; }
+html { background: #f3f1ec; scroll-behavior: smooth; }
+body {
+  background: #f3f1ec;
+  color: #16150f;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection { background: #1c3ffb; color: #fff; }
+:focus-visible { outline: 2px solid #1c3ffb; outline-offset: 3px; }
+
+/* Range inputs: thin rule with a square handle */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-runnable-track { height: 2px; background: #16150f; }
+input[type='range']::-moz-range-track { height: 2px; background: #16150f; }
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 22px;
+  margin-top: -10px;
+  background: #16150f;
+  border: 0;
+  border-radius: 0;
+}
+input[type='range']::-moz-range-thumb { width: 14px; height: 22px; background: #16150f; border: 0; border-radius: 0; }
+input[type='range']:hover::-webkit-slider-thumb { background: #1c3ffb; }
+input[type='range']:hover::-moz-range-thumb { background: #1c3ffb; }
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.2;
+    border: 1px solid #16150f;
+    border-radius: 2px;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: #16150f; color: #f3f1ec; }
+  .btn-primary:hover:not(:disabled) { background: #1c3ffb; border-color: #1c3ffb; }
+  .btn-ghost { background: transparent; color: #16150f; }
+  .btn-ghost:hover:not(:disabled) { background: #16150f; color: #f3f1ec; }
+
+  .field {
+    width: 100%;
+    border: 1px solid #b9b4a4;
+    border-radius: 2px;
+    background: #faf9f6;
+    padding: 0.7rem 0.8rem;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.8rem;
+    color: #16150f;
+  }
+  .field::placeholder { color: #8d8878; }
+  .field:hover { border-color: #16150f; }
+  .field:focus { border-color: #16150f; outline: none; box-shadow: 0 0 0 2px #1c3ffb; }
+
+  .toggle {
+    border: 1px solid #b9b4a4;
+    border-radius: 2px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.85rem;
+    color: #6b6759;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .toggle:hover { border-color: #16150f; color: #16150f; }
+  .toggle[aria-pressed='true'] { background: #16150f; border-color: #16150f; color: #f3f1ec; }
+
+  .label-mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6b6759;
+  }
+}
+
+/* Motion */
+.rise { opacity: 0; transform: translateY(14px); }
+html[data-ready='1'] .rise {
+  animation: rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--d, 0s);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+.page-enter { animation: pagein 0.35s ease-out both; }
+@keyframes pagein { from { opacity: 0; } to { opacity: 1; } }
+
+.preloader { transition: transform 0.7s cubic-bezier(0.7, 0, 0.2, 1); }
+.preloader-out { transform: translateY(-100%); }
+html[data-seen='1'] .preloader { display: none; }
+
+.bar-grow { transition: width 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise, .reveal { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+  .page-enter { animation: none; }
+  .preloader { transition: none; }
+  .bar-grow { transition: none; }
+}

@@ -1,16 +1,26 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./app/**/*.{ts,tsx}'],
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
+    // Square-ish corners only. There is deliberately no "full" radius.
+    borderRadius: { none: '0', DEFAULT: '2px', sm: '2px', md: '2px', lg: '2px' },
     extend: {
       colors: {
-        bg: '#0d1015', panel: '#151a22', line: '#252c38', ink: '#e6e9ef', mute: '#8b94a5',
-        signal: '#6ea8ff', ok: '#4ade80', warn: '#f59e0b', bad: '#f87171',
+        paper: '#f3f1ec',
+        card: '#faf9f6',
+        ink: '#16150f',
+        rule: '#d8d4c8',
+        mute: '#6b6759',
+        accent: '#1c3ffb',
+        ok: '#17794a',
+        warn: '#9a6400',
+        bad: '#c0301a',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
+      maxWidth: { page: '72rem' },
     },
   },
   plugins: [],
