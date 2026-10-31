@@ -23,9 +23,9 @@ export default function Generator() {
 
   const yml = useMemo(() => {
     if (!chains.length) return '# Select at least one chain'
-    const lines: string[] = ['# nodecore.yml', 'upstream-config:', '  upstreams:']
+    const lines: string[] = ['# nodecore.yml', '# Replace YOUR_DRPC_KEY with your key. Do not commit this file.', 'upstream-config:', '  upstreams:']
     chains.forEach((c) => {
-      lines.push(`    - id: drpc-${c.slug}`, `      chain: ${c.slug}`, '      connectors:', '        - type: json-rpc', `          url: https://lb.drpc.live/${c.slug}/\${DRPC_KEY}`)
+      lines.push(`    - id: drpc-${c.slug}`, `      chain: ${c.slug}`, '      connectors:', '        - type: json-rpc', `          url: https://lb.drpc.live/${c.slug}/YOUR_DRPC_KEY`)
     })
     if (bk) {
       const c = chains[0]
@@ -40,15 +40,13 @@ export default function Generator() {
     const method = 'eth_blockNumber'
     const body = `-d '{"jsonrpc":"2.0","id":1,"method":"${method}","params":[]}'`
     const lines = [
-      '# 1. Put your dRPC key in the environment',
-      'export DRPC_KEY=your_key_here',
+      '# 1. Save nodecore.yml here and replace YOUR_DRPC_KEY with your key (keep the file out of git)',
       '',
       '# 2. Start NodeCore on port 9090',
       'docker run -d --name nodecore --restart always \\',
       '  -p 9090:9090 \\',
-      '  -e DRPC_KEY \\',
       '  -v $(pwd)/nodecore.yml:/nodecore.yml \\',
-      '  drpcorg/nodecore:latest',
+      '  drpcorg/nodecore',
       '',
       '# 3. Send a request through it',
       `curl -X POST http://localhost:9090/queries/${slug} \\`,
@@ -128,8 +126,8 @@ export default function Generator() {
             <span>Include the quorum verification request</span>
           </label>
           <p className="text-[12px] leading-relaxed text-gray-400">
-            The key never goes into a file. The yml reads DRPC_KEY, the Docker command passes it through, and the viem snippet reads it
-            from process.env.
+            RouteLab never sees your key. In nodecore.yml you replace YOUR_DRPC_KEY yourself, and the viem snippet reads it from
+            process.env.DRPC_KEY.
           </p>
         </div>
       </div>

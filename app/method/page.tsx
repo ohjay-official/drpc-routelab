@@ -102,10 +102,11 @@ export default function MethodPage() {
 
         <Block title="Generated files">
           <p>
-            The nodecore.yml follows the structure in dRPC&rsquo;s NodeCore documentation: <span className="code">upstream-config</span>,
-            a list of upstreams, and a <span className="code">json-rpc</span> connector per upstream. The Docker command and the
-            quorum query parameters (<span className="code">quorum=3&amp;quorum_required=2</span>) come from the same
-            documentation. See the{' '}
+            The nodecore.yml follows the structure in the NodeCore README: <span className="code">upstream-config</span>, a list of
+            upstreams, and a <span className="code">json-rpc</span> connector per upstream. The Docker image, the mount at{' '}
+            <span className="code">/nodecore.yml</span>, port 9090 and the <span className="code">/queries/chain</span> request path
+            come from the same README. The key is a placeholder you replace yourself, because RouteLab never sees it. The quorum
+            request is an example of the verification feature, so check the current syntax in the{' '}
             <a className={ext} href="https://drpc.org/docs/gettingstarted/verification" target="_blank" rel="noopener noreferrer">verification guide</a> and the{' '}
             <a className={ext} href="https://github.com/drpcorg/nodecore" target="_blank" rel="noopener noreferrer">NodeCore repository</a>.
           </p>
