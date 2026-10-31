@@ -1,10 +1,11 @@
-import { GROWTH_PER_M, WORK, money } from '@/lib/pricing'
+import { DRPC_PLANS, WORK, money, planCost } from '@/lib/pricing'
 
 // A worked example, computed from the same rates the simulator uses. Not a measurement.
 const VOL = 25
 const w = WORK.logs
+const pro = DRPC_PLANS.find((p) => p.id === 'pro')!
 const ROWS = [
-  { name: 'dRPC Growth', cost: VOL * GROWTH_PER_M, mine: true },
+  { name: 'dRPC Pro', cost: planCost(pro, VOL), mine: true },
   { name: 'QuickNode', cost: VOL * w.quicknode, mine: false },
   { name: 'Ankr', cost: VOL * w.ankr, mine: false },
   { name: 'Alchemy', cost: VOL * w.alchemy, mine: false },
@@ -16,7 +17,7 @@ export default function CostPreview() {
     <div className="card overflow-hidden">
       <div className="px-5 py-4">
         <p className="text-[13px] font-medium text-gray-900">Example: {VOL}M eth_getLogs requests a month</p>
-        <p className="mt-0.5 text-[12px] text-gray-400">Worked from list rates, not a live quote</p>
+        <p className="mt-0.5 text-[12px] text-gray-400">Worked from list rates with dRPC Pro, not a live quote</p>
       </div>
       <ul className="border-t border-black/5">
         {ROWS.map((r) => (

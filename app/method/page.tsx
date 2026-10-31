@@ -69,24 +69,34 @@ export default function MethodPage() {
 
         <Block title="Pricing model">
           <p>
-            <strong>dRPC:</strong> a flat 20 compute units per request on any method. Free is 210M CU per 30 days, which is 10.5M requests, at
-            up to 100 RPS on public nodes. Growth is $6 per 1M requests (20M CU at $0.30 per 1M CU) up to 5,000 RPS.
+            <strong>dRPC:</strong> a flat 20 compute units per request on any method. The plans are modeled as listed on its pricing page.
+            Free: 210M CU, about 10.5M requests, 100 RPS, public nodes only. Pay as You Go: $6 per 1M requests, 100 RPS, no commitment.
+            Pro: $49 a month with 10M requests included and 300 RPS. Scale: $199 a month with 47M requests included and 600 RPS.
+            Enterprise starts at $990 a month with unlimited RPS and needs a quote.
           </p>
           <p>
-            <strong>Alchemy:</strong> $0.525 per 1M compute units, weighted by method. This tool uses 10 CU for eth_blockNumber, 26 CU for
-            eth_call and 60 CU for eth_getLogs, which gives $5.25, $13.65 and $31.50 per 1M requests.
+            Once a Pro or Scale pool is used, overage is charged from the account balance at $6 per 1M multi-chain requests. If the
+            balance is empty and there is no overdraft, requests stop until funds are added, and a paid plan does not fall back to Free.
+            The simulator picks the cheapest listed plan that fits your volume and peak RPS. The 100 RPS limit on Pay as You Go applies
+            to new accounts, and existing customers keep their current terms. Solana is billed at $3.9 per 1M requests and is not
+            modeled here, which is EVM only.
           </p>
           <p>
-            <strong>QuickNode:</strong> the overage rate of $0.62 per 1M API credits at 20 credits per call, or $12.40 per 1M requests.
-            Plan fees, included allowances and the cheaper overage on higher plans are not modeled.
+            <strong>Alchemy:</strong> $0.52 per 1M compute units, weighted by method. This tool uses 10 CU for eth_blockNumber, 26 CU for
+            eth_call and 60 CU for eth_getLogs, which gives $5.20, $13.52 and $31.20 per 1M requests.
+          </p>
+          <p>
+            <strong>QuickNode:</strong> the Build plan overage rate of $0.62 per 1M API credits at 20 credits per call, or $12.40 per 1M
+            requests. Plan fees, included allowances and the cheaper overage on higher plans are not modeled.
           </p>
           <p>
             <strong>Ankr:</strong> 200 API credits per EVM request at $0.10 per 1M credits, or $20 per 1M requests.
           </p>
           <p>
             These are published rates as reported for October 2026. Vendors change prices, so confirm each one on its own page:{' '}
-            <a className={ext} href="https://drpc.org/pricing" target="_blank" rel="noopener noreferrer">dRPC</a>. Free allowances of
-            competitors are not modeled, and the Growth cost is volume times $6 with no free allowance deducted.
+            <a className={ext} href="https://drpc.org/pricing" target="_blank" rel="noopener noreferrer">dRPC</a>. Competitor free
+            allowances are not modeled, so their figures are a ceiling for comparison, not a quote. Competitor RPS limits are not
+            modeled either.
           </p>
         </Block>
 
