@@ -9,8 +9,6 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <LegalPage
-      num="06"
-      label="Terms"
       title="Terms and conditions"
       intro="By using RouteLab you agree to these terms. They are short because the site is a small free tool. Last updated October 30, 2026."
     >

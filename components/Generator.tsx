@@ -109,11 +109,11 @@ export default function Generator() {
   const text = tab === 'yml' ? yml : tab === 'run' ? run : viem
 
   return (
-    <div className="mx-auto grid max-w-page grid-cols-1 gap-12 px-5 py-12 sm:px-8 lg:grid-cols-12">
+    <div className="mx-auto grid max-w-page grid-cols-1 gap-8 px-5 py-6 sm:px-8 lg:grid-cols-12">
       <div className="min-w-0 lg:col-span-4">
-        <div className="space-y-7 lg:sticky lg:top-24">
+        <div className="card space-y-6 p-5 lg:sticky lg:top-24">
           <fieldset>
-            <legend className="label-mono">Chains</legend>
+            <legend className="text-[13px] font-medium text-gray-900">Chains</legend>
             <div className="mt-3 flex flex-wrap gap-2">
               {CHAINS.map((c) => (
                 <button key={c.slug} type="button" className="toggle" aria-pressed={sel.includes(c.slug)} onClick={() => toggle(c.slug)}>
@@ -123,15 +123,15 @@ export default function Generator() {
             </div>
           </fieldset>
           <div>
-            <label htmlFor="bk" className="label-mono">Backup RPC URL (optional)</label>
-            <input id="bk" className="field mt-2" value={backup} onChange={(e) => setBackup(e.target.value)} placeholder="https://your-backup.example" autoComplete="off" spellCheck={false} />
-            <p className="mt-2 text-xs text-mute">Added as a second upstream for the first chain you selected.</p>
+            <label htmlFor="bk" className="text-[13px] font-medium text-gray-900">Backup RPC URL (optional)</label>
+            <input id="bk" className="field mono mt-2" value={backup} onChange={(e) => setBackup(e.target.value)} placeholder="https://your-backup.example" autoComplete="off" spellCheck={false} />
+            <p className="mt-2 text-[12px] text-gray-400">Added as a second upstream for the first chain you selected.</p>
           </div>
-          <label className="flex items-start gap-3 text-sm">
-            <input type="checkbox" className="mt-1 h-4 w-4 accent-accent" checked={quorum} onChange={(e) => setQuorum(e.target.checked)} />
+          <label className="flex items-start gap-3 text-[13px] text-gray-900">
+            <input type="checkbox" className="mt-0.5 h-4 w-4 accent-blue-500" checked={quorum} onChange={(e) => setQuorum(e.target.checked)} />
             <span>Include the quorum verification request</span>
           </label>
-          <p className="text-xs leading-relaxed text-mute">
+          <p className="text-[12px] leading-relaxed text-gray-400">
             The key never goes into a file. The yml reads DRPC_KEY, the Docker command passes it through, and the viem snippet reads it
             from process.env.
           </p>
@@ -139,8 +139,8 @@ export default function Generator() {
       </div>
 
       <div className="min-w-0 lg:col-span-8">
-        <div className="flex items-center justify-between border-b border-ink">
-          <div className="flex gap-6 overflow-x-auto text-sm" role="tablist" aria-label="Generated files">
+        <div className="flex items-center justify-between border-b border-black/10">
+          <div className="flex gap-6 overflow-x-auto" role="tablist" aria-label="Generated files">
             {TABS.map((t) => (
               <button
                 key={t.id}
@@ -148,7 +148,7 @@ export default function Generator() {
                 role="tab"
                 aria-selected={tab === t.id}
                 onClick={() => setTab(t.id)}
-                className={`-mb-px whitespace-nowrap border-b-2 pb-3 ${tab === t.id ? 'border-ink font-semibold' : 'border-transparent text-mute hover:text-ink'}`}
+                className={`-mb-px whitespace-nowrap border-b-2 pb-3 text-[13px] ${tab === t.id ? 'border-blue-500 font-medium text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-900'}`}
               >
                 {t.label}
               </button>
@@ -158,7 +158,7 @@ export default function Generator() {
             <CopyButton text={text} />
           </div>
         </div>
-        <pre className="mt-0 max-h-[34rem] overflow-auto bg-ink p-5 font-mono text-xs leading-relaxed text-paper sm:text-[13px]" role="tabpanel">{text}</pre>
+        <pre className="card codeblock mt-4 max-h-[34rem] overflow-auto p-5" role="tabpanel">{text}</pre>
       </div>
     </div>
   )

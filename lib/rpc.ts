@@ -3,31 +3,44 @@ import { CHAINS } from './chains'
 export const SAMPLES = 6
 export const TIMEOUT_MS = 4000
 
-export type PingResult = { ms: number | null; block: number | null; err: string | null }
-export type Stat = { p50: number | null; p95: number | null; block: number | null; fails: number; err: string | null }
+export type PingResult = { ms: number | null; block: number | null; err: string | null; detail?: string | null }
+export type Stat = { p50: number | null; p95: number | null; block: number | null; fails: number; err: string | null; detail?: string | null }
 
 /** One JSON-RPC call. Failures are classified instead of collapsed into a generic error. */
 export async function ping(url: string, sol = false): Promise<PingResult> {
   const t = performance.now()
   const ctl = new AbortController()
   const timer = setTimeout(() => ctl.abort(), TIMEOUT_MS)
-  const fail = (err: string): PingResult => ({ ms: null, block: null, err })
-  try {
-    const r = await fetch(url, {
+  const fail = (err: string, detail: string | null = null): PingResult => ({ ms: null, block: null, err, detail })
+  const send = (params: unknown[]) =>
+    fetch(url, {
       method: 'POST',
       signal: ctl.signal,
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: sol ? 'getSlot' : 'eth_blockNumber', params: [] }),
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: sol ? 'getSlot' : 'eth_blockNumber', params }),
     })
+  try {
+    let r = await send([])
+    // Some Solana gateways reject empty params. Retry once with an explicit commitment.
+    if (sol && r.status === 400) r = await send([{ commitment: 'confirmed' }])
     if (r.status === 429) return fail('rate-limited')
-    if (!r.ok) return fail('http-' + r.status)
+    if (!r.ok) {
+      let detail: string | null = null
+      try {
+        detail = (await r.text()).replace(/\s+/g, ' ').slice(0, 90) || null
+      } catch {}
+      return fail('http-' + r.status, detail)
+    }
     let j: any
     try {
       j = await r.json()
     } catch {
       return fail('bad-response')
     }
-    if (!j || j.error || j.result === undefined || j.result === null) return fail('rpc-error')
+    if (!j || j.error || j.result === undefined || j.result === null) {
+      const m = j && j.error && (j.error.message || (typeof j.error === 'string' ? j.error : null))
+      return fail('rpc-error', m ? String(m).slice(0, 90) : null)
+    }
     const block = sol ? Number(j.result) : parseInt(j.result, 16)
     if (!Number.isFinite(block)) return fail('rpc-error')
     return { ms: performance.now() - t, block, err: null }
@@ -50,6 +63,7 @@ export async function bench(url: string, sol = false): Promise<Stat> {
   let block: number | null = null
   let fails = 0
   let err: string | null = null
+  let detail: string | null = null
   let streak = warm.ms === null ? 1 : 0
   for (let i = 0; i < SAMPLES; i++) {
     // Two failures in a row means the endpoint is down. Stop instead of waiting out six more timeouts.
@@ -62,15 +76,19 @@ export async function bench(url: string, sol = false): Promise<Stat> {
       fails++
       streak++
       err = r.err
+      detail = r.detail ?? null
     } else {
       streak = 0
       ms.push(r.ms)
       block = r.block
     }
   }
-  if (fails > 0 && err === null) err = warm.err
+  if (fails > 0 && err === null) {
+    err = warm.err
+    detail = warm.detail ?? null
+  }
   ms.sort((a, b) => a - b)
-  return { p50: ms.length ? pct(ms, 50) : null, p95: ms.length ? pct(ms, 95) : null, block, fails, err }
+  return { p50: ms.length ? pct(ms, 50) : null, p95: ms.length ? pct(ms, 95) : null, block, fails, err, detail }
 }
 
 /* A tiny shared store for the quick scan, used by the preloader and the home page. */

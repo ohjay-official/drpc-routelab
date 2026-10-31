@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function BenchmarkPage() {
   return (
     <>
-      <PageHead num="01" label="Benchmark" title="Latency and failover check">
+      <PageHead title="Latency and failover check">
         Time real calls to dRPC&rsquo;s public nodes and to your own routes. Set a latency threshold and see whether your primary
         would hold or hand over to the backup.
       </PageHead>

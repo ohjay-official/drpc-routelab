@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ConfigsPage() {
   return (
     <>
-      <PageHead num="03" label="Configs" title="NodeCore and viem configs">
+      <PageHead title="NodeCore and viem configs">
         Choose the chains and an optional backup. The files below update as you change them and are ready to copy.
       </PageHead>
       <Generator />

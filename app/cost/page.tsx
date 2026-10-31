@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function CostPage() {
   return (
     <>
-      <PageHead num="02" label="Cost" title="NodeCloud cost simulator">
+      <PageHead title="NodeCloud cost simulator">
         dRPC bills a flat 20 compute units per request on any method. Other providers weight cost by method, so the same traffic
         can price very differently. Pick a workload and a volume.
       </PageHead>

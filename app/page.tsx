@@ -1,42 +1,47 @@
 import Link from 'next/link'
+import ConfigPreview from '@/components/ConfigPreview'
+import CostPreview from '@/components/CostPreview'
 import HeroVideo from '@/components/HeroVideo'
 import LiveStrip from '@/components/LiveStrip'
 import Reveal from '@/components/Reveal'
 
-const TOOLS = [
-  {
-    n: '01',
-    name: 'Latency benchmark',
-    href: '/benchmark',
-    body: 'Six timed eth_blockNumber calls per endpoint (getSlot on Solana). You get p50, p95, chain head and failed calls, plus a failover verdict against a threshold you set, including how far your route lags dRPC’s public node.',
-  },
-  {
-    n: '02',
-    name: 'Cost simulator',
-    href: '/cost',
-    body: 'Monthly requests and peak RPS against the dRPC Free tier and Growth plan, next to per-request rates for Alchemy, QuickNode and Ankr. Switch the workload between standard reads, eth_getLogs and light calls.',
-  },
-  {
-    n: '03',
-    name: 'Config generator',
-    href: '/configs',
-    body: 'A nodecore.yml with the Docker run command and a quorum check, and a viem fallback transport with ranking, for the chains you pick. The API key is read from the environment, never written into a file.',
-  },
-]
+function Arrow() {
+  return <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+}
 
-const SAMPLE = `# nodecore.yml
-upstream-config:
-  upstreams:
-    - id: drpc-ethereum
-      chain: ethereum
-      connectors:
-        - type: json-rpc
-          url: https://lb.drpc.live/ethereum/\${DRPC_KEY}
-    - id: drpc-base
-      chain: base
-      connectors:
-        - type: json-rpc
-          url: https://lb.drpc.live/base/\${DRPC_KEY}`
+function Feature({
+  title,
+  body,
+  href,
+  cta,
+  flip,
+  children,
+}: {
+  title: string
+  body: string
+  href: string
+  cta: string
+  flip?: boolean
+  children: React.ReactNode
+}) {
+  return (
+    <section>
+      <div className="mx-auto grid max-w-page grid-cols-1 items-center gap-8 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-12 lg:gap-16">
+        <Reveal className={`min-w-0 lg:col-span-5 ${flip ? 'lg:order-2' : ''}`}>
+          <h2 className="text-[1.5rem] font-medium leading-[1.15] tracking-tight text-gray-900 sm:text-[1.75rem]">{title}</h2>
+          <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-gray-500">{body}</p>
+          <Link href={href} className="group mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-blue-500 transition-colors hover:text-blue-600">
+            {cta}
+            <Arrow />
+          </Link>
+        </Reveal>
+        <Reveal className={`min-w-0 lg:col-span-7 ${flip ? 'lg:order-1' : ''}`} d={0.08}>
+          {children}
+        </Reveal>
+      </div>
+    </section>
+  )
+}
 
 export default function Home() {
   return (
@@ -52,7 +57,7 @@ export default function Home() {
                 className="group mb-3 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-blue-500 transition-colors hover:text-blue-600"
               >
                 Independent tool, not affiliated with dRPC
-                <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+                <Arrow />
               </Link>
               <h1 className="mb-3 text-[1.5rem] font-medium leading-[1.15] tracking-tight text-gray-900 sm:text-[1.75rem]">
                 Benchmark dRPC endpoints from your own browser.
@@ -63,107 +68,57 @@ export default function Home() {
                 className="group inline-flex items-center gap-2 rounded-full border border-blue-400 px-5 py-2.5 text-[13px] font-medium text-blue-500 transition-all duration-200 hover:border-blue-500 hover:bg-blue-500 hover:text-white"
               >
                 Run the benchmark
-                <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
+                <Arrow />
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Live check */}
-      <section className="border-b border-rule">
-        <div className="mx-auto grid max-w-page grid-cols-1 gap-10 px-5 py-20 sm:px-8 lg:grid-cols-12">
-          <Reveal className="min-w-0 lg:col-span-6">
-            <p className="label-mono">Live check</p>
-            <h2 className="mt-3 max-w-md text-3xl font-semibold tracking-tight sm:text-4xl">Your connection to dRPC, right now.</h2>
-            <p className="mt-5 max-w-md leading-relaxed text-mute">
-              These are real calls from this browser to dRPC&rsquo;s public nodes. Each figure includes connection setup. The
-              benchmark page runs six timed calls per endpoint and adds p50, p95 and a failover verdict.
-            </p>
-            <Link href="/benchmark" className="btn btn-ghost mt-7">
-              Open the benchmark
-            </Link>
-          </Reveal>
-          <Reveal className="min-w-0 lg:col-span-6" d={0.08}>
-            <LiveStrip />
-          </Reveal>
-        </div>
-      </section>
+      <div className="pt-8 sm:pt-12">
+        <Feature
+          title="Test your connection to dRPC."
+          body="Real calls from this browser to dRPC's public nodes, with a full benchmark that adds p50, p95 and a failover verdict against your own routes."
+          href="/benchmark"
+          cta="Open the benchmark"
+        >
+          <LiveStrip />
+        </Feature>
 
-      {/* Tools */}
-      <section>
-        <div className="mx-auto max-w-page px-5 pt-20 sm:px-8">
-          <Reveal>
-            <p className="label-mono">Tools</p>
-            <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">Three tools, each on its own page.</h2>
-          </Reveal>
+        <Feature
+          flip
+          title="Price your traffic before you move it."
+          body="dRPC charges a flat 20 compute units per request. Other providers weight by method, so heavy log queries are where the gap shows."
+          href="/cost"
+          cta="Open the cost simulator"
+        >
+          <CostPreview />
+        </Feature>
 
-          <div className="mt-12 border-b border-ink">
-            {TOOLS.map((t, i) => (
-              <Reveal key={t.n} d={i * 0.06}>
-                <Link
-                  href={t.href}
-                  className="group grid gap-3 border-t border-ink py-8 transition-colors hover:bg-card sm:grid-cols-12 sm:gap-6 sm:px-3"
-                >
-                  <span className="font-mono text-xs text-mute sm:col-span-1 sm:pt-2">{t.n}</span>
-                  <h3 className="text-2xl font-semibold tracking-tight sm:col-span-4 sm:text-3xl">{t.name}</h3>
-                  <p className="max-w-xl leading-relaxed text-mute sm:col-span-6">{t.body}</p>
-                  <span className="font-mono text-sm underline-offset-4 group-hover:underline sm:col-span-1 sm:text-right">Open</span>
+        <Feature
+          title="Get a config you can paste."
+          body="A NodeCore file, the Docker command, a quorum check and a viem fallback transport for the chains you pick."
+          href="/configs"
+          cta="Open the generator"
+        >
+          <ConfigPreview />
+        </Feature>
+
+        <section>
+          <div className="mx-auto max-w-page px-5 pb-8 pt-8 sm:px-8">
+            <Reveal>
+              <p className="max-w-2xl text-[13px] leading-relaxed text-gray-500">
+                Latency figures describe your own network path at the moment you run a test, and prices are published list rates as
+                reported for October 2026. Neither is a ranking of providers.{' '}
+                <Link href="/method" className="group inline-flex items-center gap-1 font-medium text-blue-500 hover:text-blue-600">
+                  How each number is produced
+                  <Arrow />
                 </Link>
-              </Reveal>
-            ))}
+              </p>
+            </Reveal>
           </div>
-        </div>
-      </section>
-
-      {/* Sample output */}
-      <section>
-        <div className="mx-auto grid max-w-page grid-cols-1 gap-10 px-5 pt-24 sm:px-8 lg:grid-cols-12">
-          <Reveal className="min-w-0 lg:col-span-5">
-            <p className="label-mono">Sample output</p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">What a generated config looks like.</h2>
-            <p className="mt-5 max-w-md leading-relaxed text-mute">
-              The generator follows the format in dRPC’s NodeCore documentation. Keys are never written into the file. NodeCore
-              reads DRPC_KEY from the environment when it starts.
-            </p>
-            <Link href="/configs" className="btn btn-ghost mt-7">
-              Open the generator
-            </Link>
-          </Reveal>
-          <Reveal className="min-w-0 lg:col-span-7" d={0.08}>
-            <pre className="overflow-x-auto bg-ink p-5 font-mono text-xs leading-relaxed text-paper sm:p-6 sm:text-[13px]">{SAMPLE}</pre>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Limits */}
-      <section>
-        <div className="mx-auto max-w-page px-5 pt-24 sm:px-8">
-          <Reveal>
-            <div className="grid gap-6 border border-ink bg-card p-6 sm:grid-cols-12 sm:p-8">
-              <div className="sm:col-span-4">
-                <p className="label-mono">Before you rely on it</p>
-              </div>
-              <div className="space-y-4 leading-relaxed text-mute sm:col-span-8">
-                <p>
-                  Latency figures describe your own network path to each endpoint at the moment you run the test. They are not a
-                  ranking of providers.
-                </p>
-                <p>
-                  Prices are published list rates as reported for October 2026. Free allowances and subscription fees are not
-                  modeled. Check each vendor’s pricing page before you decide anything.
-                </p>
-                <p>
-                  <Link href="/method" className="text-ink underline underline-offset-4 hover:text-accent">
-                    The method page
-                  </Link>{' '}
-                  lists exactly how each number is produced.
-                </p>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   )
 }

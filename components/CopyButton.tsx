@@ -6,7 +6,7 @@ export default function CopyButton({ text }: { text: string }) {
   return (
     <button
       type="button"
-      className="btn btn-ghost !px-3 !py-1.5 !text-xs"
+      className="btn btn-ghost btn-sm"
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(text)

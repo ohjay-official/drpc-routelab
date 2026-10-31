@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { CHAINS } from '@/lib/chains'
 import { scan } from '@/lib/rpc'
 import { useScan } from '@/lib/useScan'
+import Logo from './Logo'
 
 export default function Preloader() {
   const res = useScan()
@@ -47,39 +48,34 @@ export default function Preloader() {
 
   return (
     <div
-      className={`preloader fixed inset-0 z-50 flex flex-col justify-between bg-paper p-5 sm:p-10 ${phase === 'out' ? 'preloader-out' : ''}`}
+      className={`preloader fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#f0f0ee] px-6 ${phase === 'out' ? 'preloader-out' : ''}`}
       role="status"
       aria-live="polite"
       aria-label="Loading RouteLab"
     >
-      <div className="flex items-baseline justify-between">
-        <span className="text-lg font-semibold tracking-tight">RouteLab</span>
-        <span className="font-mono text-xs text-mute">Pinging dRPC public nodes</span>
+      <div className="flex h-11 w-11 items-center justify-center rounded-full" style={{ backgroundColor: '#EDEDED' }}>
+        <Logo />
       </div>
-
-      <div className="grid gap-8 sm:grid-cols-[1fr_auto] sm:items-end">
-        <ul className="font-mono text-xs sm:w-96 sm:text-sm">
-          {CHAINS.map((c) => {
-            const r = res[c.slug]
-            return (
-              <li key={c.slug} className="flex justify-between border-t border-rule py-2">
-                <span>{c.label}</span>
-                <span className={r ? (r.ms === null ? 'text-bad' : 'text-ink') : 'text-mute'}>
-                  {r ? (r.ms === null ? r.err : `${Math.round(r.ms)} ms`) : '...'}
-                </span>
-              </li>
-            )
-          })}
-        </ul>
-        <div className="font-mono text-7xl leading-none tabular-nums sm:text-9xl">
-          {String(done).padStart(2, '0')}
-          <span className="text-mute">/{String(total).padStart(2, '0')}</span>
-        </div>
+      <p className="mt-5 text-[13px] text-gray-500">Pinging dRPC public nodes</p>
+      <ul className="mt-6 w-full max-w-xs text-[13px]">
+        {CHAINS.map((c) => {
+          const r = res[c.slug]
+          return (
+            <li key={c.slug} className="flex justify-between border-b border-black/5 py-2 last:border-b-0">
+              <span className="text-gray-900">{c.label}</span>
+              <span className={`tabular-nums ${r ? (r.ms === null ? 'text-bad' : 'text-gray-900') : 'text-gray-400'}`}>
+                {r ? (r.ms === null ? r.err : `${Math.round(r.ms)} ms`) : '...'}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+      <div className="mt-6 h-1 w-full max-w-xs overflow-hidden rounded-full bg-black/10">
+        <div className="bar-grow h-1 rounded-full bg-blue-500" style={{ width: `${(done / total) * 100}%` }} />
       </div>
-
-      <div className="h-px bg-rule">
-        <div className="bar-grow h-px bg-ink" style={{ width: `${(done / total) * 100}%` }} />
-      </div>
+      <p className="mt-3 text-[12px] tabular-nums text-gray-400">
+        {done} of {total}
+      </p>
     </div>
   )
 }

@@ -9,8 +9,6 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <LegalPage
-      num="05"
-      label="Privacy"
       title="Privacy policy"
       intro="RouteLab is a static site with no accounts and no backend of its own. This page explains what that means in practice. Last updated October 30, 2026."
     >

@@ -1,12 +1,8 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
-import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Preloader from '@/components/Preloader'
-
-const sans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap' })
-const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-mono', display: 'swap' })
 
 export const metadata: Metadata = {
   title: { default: 'RouteLab for dRPC', template: '%s | RouteLab' },
@@ -17,7 +13,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#f3f1ec',
+  themeColor: '#f0f0ee',
 }
 
 // Runs before first paint: skips the preloader on repeat visits in the same session,
@@ -28,16 +24,16 @@ const noscript = '<style>.preloader{display:none}.rise,.reveal{opacity:1;transfo
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: boot }} />
         <noscript dangerouslySetInnerHTML={{ __html: noscript }} />
       </head>
-      <body className="bg-paper font-sans text-ink antialiased">
+      <body className="bg-[#f0f0ee] font-sans text-gray-900 antialiased">
         <Preloader />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-3 focus:py-2 focus:text-paper"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-gray-900 focus:px-4 focus:py-2 focus:text-[13px] focus:text-white"
         >
           Skip to content
         </a>

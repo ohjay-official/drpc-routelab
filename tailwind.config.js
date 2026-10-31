@@ -2,24 +2,9 @@
 module.exports = {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
-    // Square corners across the app. xl and full exist only for the hero navbar and CTA.
-    borderRadius: { none: '0', DEFAULT: '2px', sm: '2px', md: '2px', lg: '2px', xl: '12px', full: '9999px' },
+    borderRadius: { none: '0', sm: '4px', DEFAULT: '6px', md: '8px', lg: '10px', xl: '12px', '2xl': '16px', '3xl': '24px', full: '9999px' },
     extend: {
-      colors: {
-        paper: '#f3f1ec',
-        card: '#faf9f6',
-        ink: '#16150f',
-        rule: '#d8d4c8',
-        mute: '#6b6759',
-        accent: '#1c3ffb',
-        ok: '#17794a',
-        warn: '#9a6400',
-        bad: '#c0301a',
-      },
-      fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
-      },
+      colors: { ok: '#15803d', warn: '#b45309', bad: '#dc2626' },
       maxWidth: { page: '72rem' },
     },
   },
