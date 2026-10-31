@@ -28,7 +28,10 @@ export default function PrivacyPage() {
           own policies. RouteLab&rsquo;s own pages never see that traffic.
         </p>
         <p>
-          The configuration generator never asks for an API key. The files it produces read your key from an environment variable.
+          The looping video on the home page is loaded from a third-party content host, which sees your IP address when it is fetched.
+        </p>
+        <p>
+          The configuration generator never asks for an API key. The files it produces contain a YOUR_DRPC_KEY placeholder that you replace yourself.
           If you paste an RPC URL that contains a key into the benchmark, the key is used only for the requests you start. It is held
           in the page&rsquo;s memory and cleared when you close or reload the tab.
         </p>

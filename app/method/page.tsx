@@ -69,7 +69,7 @@ export default function MethodPage() {
 
         <Block title="Pricing model">
           <p>
-            <strong>dRPC:</strong> a flat 20 compute units per request on any method. The plans are modeled as listed on its pricing page.
+            <strong>dRPC:</strong> 20 compute units per request on Free, Pay as You Go and overage. Inside the Pro and Scale pools a request costs about 16 and 14 CU, which is why they include roughly 10M and 47M requests. The plans are modeled as listed on its pricing page.
             Free: 210M CU, about 10.5M requests, 100 RPS, public nodes only. Pay as You Go: $6 per 1M requests, 100 RPS, no commitment.
             Pro: $49 a month with 10M requests included and 300 RPS. Scale: $199 a month with 47M requests included and 600 RPS.
             Enterprise starts at $990 a month with unlimited RPS and needs a quote.
@@ -82,12 +82,12 @@ export default function MethodPage() {
             and is not modeled.
           </p>
           <p>
-            <strong>Alchemy:</strong> $0.52 per 1M compute units, weighted by method. This tool uses 10 CU for eth_blockNumber, 26 CU for
-            eth_call and 75 CU for eth_getLogs, which gives $5.20, $13.52 and $39.00 per 1M requests.
+            <strong>Alchemy:</strong> $0.525 per 1M compute units, weighted by method. This tool uses 10 CU for eth_blockNumber, 26 CU for
+            eth_call and 60 CU for eth_getLogs, which gives $5.25, $13.65 and $31.50 per 1M requests. The eth_getLogs weight and the
+            per-unit rate are the figures most worth confirming on Alchemy&rsquo;s own pricing page.
           </p>
           <p>
-            <strong>QuickNode:</strong> the Build plan overage rate of $0.62 per 1M API credits at 20 credits per call, or $12.40 per 1M
-            requests. Plan fees, included allowances and the cheaper overage on higher plans are not modeled.
+            <strong>QuickNode:</strong> the cheapest plan that fits your volume and peak RPS, at 20 API credits per call. Build is $49 for 80M credits at 50 RPS with $0.62 overage per 1M credits. Accelerate is $249 for 450M at 125 RPS with $0.56. Scale is $499 for 950M at 250 RPS with $0.53. Business is $999 for 2B at 500 RPS with $0.50.
           </p>
           <p>
             <strong>Ankr:</strong> 200 API credits per EVM request at $0.10 per 1M credits, or $20 per 1M requests.

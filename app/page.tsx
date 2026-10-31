@@ -71,7 +71,7 @@ export default function Home() {
               <h1 className="mb-3 text-[1.5rem] font-medium leading-[1.15] tracking-tight text-gray-900 sm:text-[1.75rem]">
                 Benchmark dRPC endpoints from your own browser.
               </h1>
-              <p className="mb-3 text-[13px] font-normal text-gray-600">Nothing leaves your device.</p>
+              <p className="mb-3 text-[13px] font-normal text-gray-600">Runs in your browser. We collect nothing.</p>
               <Link
                 href="/benchmark"
                 className="group inline-flex items-center gap-2 rounded-full border border-blue-400 px-5 py-2.5 text-[13px] font-medium text-blue-500 transition-all duration-200 hover:border-blue-500 hover:bg-blue-500 hover:text-white"
@@ -97,7 +97,7 @@ export default function Home() {
         <Feature
           flip
           title="Price your traffic before you move it."
-          body="dRPC charges a flat 20 compute units per request. Other providers weight by method, so heavy log queries are where the gap shows."
+          body="dRPC prices by request, not by method. Pick a workload, a volume and a peak RPS to see which plan fits against Alchemy, QuickNode and Ankr."
           href="/cost"
           cta="Open the cost simulator"
         >

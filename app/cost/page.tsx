@@ -11,8 +11,7 @@ export default function CostPage() {
   return (
     <>
       <PageHead title="NodeCloud cost simulator">
-        dRPC bills a flat 20 compute units per request on any method. Other providers weight cost by method, so the same traffic
-        can price very differently. Pick a workload and a volume.
+        dRPC prices by request, not by method. Alchemy weights cost by method, and QuickNode and Ankr price by plan or credit. Pick a workload, a monthly volume and a peak RPS.
       </PageHead>
       <CostSim />
     </>

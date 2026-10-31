@@ -1,13 +1,15 @@
 import DrpcMark from './DrpcMark'
-import { DRPC_PLANS, WORK, money, planCost } from '@/lib/pricing'
+import { DRPC_PLANS, WORK, money, planCost, qnBest } from '@/lib/pricing'
 
 // A worked example, computed from the same rates the simulator uses. Not a measurement.
 const VOL = 25
-const w = WORK.logs
+const RPS = 100
+const w = WORK.read
+const qn = qnBest(VOL, RPS)!
 const pro = DRPC_PLANS.find((p) => p.id === 'pro')!
 const ROWS = [
   { name: 'dRPC Pro', cost: planCost(pro, VOL), mine: true },
-  { name: 'QuickNode', cost: VOL * w.quicknode, mine: false },
+  { name: `QuickNode ${qn.plan.name}`, cost: qn.cost, mine: false },
   { name: 'Ankr', cost: VOL * w.ankr, mine: false },
   { name: 'Alchemy', cost: VOL * w.alchemy, mine: false },
 ]
@@ -17,7 +19,7 @@ export default function CostPreview() {
   return (
     <div className="card overflow-hidden">
       <div className="px-5 py-4">
-        <p className="text-[13px] font-medium text-gray-900">Example: {VOL}M eth_getLogs requests a month</p>
+        <p className="text-[13px] font-medium text-gray-900">Example: {VOL}M eth_call requests a month, up to {RPS} RPS</p>
         <p className="mt-0.5 text-[12px] text-gray-400">Worked from list rates with dRPC Pro, not a live quote</p>
       </div>
       <ul className="border-t border-black/5">

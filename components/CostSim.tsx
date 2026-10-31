@@ -2,21 +2,23 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import DrpcMark from './DrpcMark'
-import { CU_PER_REQUEST, DRPC_PLANS, ENTERPRISE_FROM, MAX_PLAN_RPS, WORK, money, planCost, planFits, type WorkKey } from '@/lib/pricing'
+import { DRPC_PLANS, ENTERPRISE_FROM, MAX_PLAN_RPS, WORK, money, planCost, planFits, qnBest, QN_PLANS, type WorkKey } from '@/lib/pricing'
 
 export default function CostSim() {
   const [vol, setVol] = useState(25)
   const [rps, setRps] = useState(200)
-  const [wk, setWk] = useState<WorkKey>('logs')
+  const [wk, setWk] = useState<WorkKey>('read')
   const w = WORK[wk]
 
-  const cu = vol * CU_PER_REQUEST
   const enterprise = rps > MAX_PLAN_RPS
 
+  const qn = qnBest(vol, rps)
   const comps = [
-    { name: 'Alchemy', cost: vol * w.alchemy, note: `${money(w.alchemy)} per 1M requests (${w.alchemyNote})` },
-    { name: 'QuickNode', cost: vol * w.quicknode, note: `${money(w.quicknode)} per 1M requests (overage rate at 20 credits per call, plan fees not modeled)` },
-    { name: 'Ankr', cost: vol * w.ankr, note: `${money(w.ankr)} per 1M requests (EVM pay-as-you-go, 200 credits per call)` },
+    qn
+      ? { name: 'QuickNode', cost: qn.cost, ok: true, note: `${qn.plan.name} plan: ${money(qn.plan.fee)} a month with ${qn.plan.inclM / 20}M calls included, then ${money(qn.plan.over * 20)} per 1M, ${qn.plan.rps} RPS limit (20 credits per call)` }
+      : { name: 'QuickNode', cost: 0, ok: false, note: `Peak RPS is above the ${QN_PLANS[QN_PLANS.length - 1].rps} RPS limit of Business` },
+    { name: 'Alchemy', cost: vol * w.alchemy, ok: true, note: `${money(w.alchemy)} per 1M requests (${w.alchemyNote})` },
+    { name: 'Ankr', cost: vol * w.ankr, ok: true, note: `${money(w.ankr)} per 1M requests (EVM pay-as-you-go, 200 credits per call)` },
   ]
 
   const plans = DRPC_PLANS.map((p) => {
@@ -34,10 +36,10 @@ export default function CostSim() {
     ...(enterprise
       ? [{ name: 'dRPC Enterprise', id: 'ent', cost: ENTERPRISE_FROM, ok: true, mine: true, from: true, note: 'Starting price, unlimited RPS. Needs a quote from sales.' }]
       : []),
-    ...comps.map((c) => ({ ...c, id: c.name, ok: true, mine: false, from: false })),
+    ...comps.map((c) => ({ ...c, id: c.name, mine: false, from: false })),
   ]
   const max = Math.max(...rows.filter((r) => r.ok).map((r) => r.cost), 1)
-  const cheapest = comps.reduce((m, c) => (c.cost < m.cost ? c : m))
+  const cheapest = comps.filter((c) => c.ok).reduce((m, c) => (c.cost < m.cost ? c : m))
   const fitting = plans.filter((p) => p.ok)
   const best = fitting.length ? fitting.reduce((m, p) => (p.cost < m.cost ? p : m)) : null
 
@@ -70,7 +72,7 @@ export default function CostSim() {
           </fieldset>
           <div>
             <label htmlFor="vol" className={lbl}>
-              Monthly requests <span className="font-normal text-gray-500">{vol}M = {cu}M CU</span>
+              Monthly requests <span className="font-normal text-gray-500">{vol}M</span>
             </label>
             <input id="vol" type="range" min={1} max={500} value={vol} onChange={(e) => setVol(+e.target.value)} className="mt-2" />
           </div>
@@ -107,7 +109,7 @@ export default function CostSim() {
 
         <p className="mt-5 px-1 text-[12px] leading-relaxed text-gray-400">
           Competitor rates are published figures as reported for October 2026, converted to cost per request for the workload you
-          picked. Competitor free allowances and subscription fees are not modeled. Confirm every rate on the vendor&rsquo;s own pricing page. The{' '}
+          picked. QuickNode is priced as its cheapest plan that fits your volume and peak RPS. Alchemy and Ankr are shown at pay-as-you-go rates. Competitor free allowances are not modeled. Confirm every rate on the vendor&rsquo;s own pricing page. The{' '}
           <Link href="/method" className="text-blue-500 underline underline-offset-4 hover:text-blue-600">method page</Link> lists the basis for each rate.
         </p>
       </div>

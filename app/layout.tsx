@@ -5,9 +5,19 @@ import Footer from '@/components/Footer'
 import Preloader from '@/components/Preloader'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://drpc-routelab.vercel.app'),
   title: { default: 'RouteLab for dRPC', template: '%s | RouteLab' },
   description:
     'Benchmark dRPC endpoints from your browser, estimate NodeCloud costs against other providers, and generate NodeCore and viem configs.',
+  openGraph: {
+    title: 'RouteLab for dRPC',
+    description: 'Benchmark dRPC endpoints from your browser, compare plan costs, and generate NodeCore and viem configs.',
+    url: '/',
+    siteName: 'RouteLab',
+    type: 'website',
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: 'RouteLab for dRPC' }],
+  },
+  twitter: { card: 'summary_large_image', title: 'RouteLab for dRPC', description: 'Benchmark dRPC endpoints, compare plan costs, generate NodeCore configs.', images: ['/og.png'] },
 }
 
 export const viewport: Viewport = {
