@@ -56,7 +56,7 @@ export default function Generator() {
     if (quorum) {
       lines.push(
         '',
-        '# 4. Quorum verification: ask 3 providers, require 2 to agree',
+        '# 4. Quorum verification: ask for 3 signed responses, require 2 to verify',
         `curl -X POST "http://localhost:9090/queries/${slug}?quorum=3&quorum_required=2" \\`,
         '  -H "Content-Type: application/json" \\',
         `  ${body}`,

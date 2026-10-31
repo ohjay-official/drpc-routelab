@@ -106,7 +106,9 @@ export default function MethodPage() {
             upstreams, and a <span className="code">json-rpc</span> connector per upstream. The Docker image, the mount at{' '}
             <span className="code">/nodecore.yml</span>, port 9090 and the <span className="code">/queries/chain</span> request path
             come from the same README. The key is a placeholder you replace yourself, because RouteLab never sees it. The quorum
-            request is an example of the verification feature, so check the current syntax in the{' '}
+            request follows the NodeCore quorum guide: <span className="code">quorum=N</span> asks for up to N signed responses and{' '}
+            <span className="code">quorum_required=M</span> needs at least M to verify. Quorum works only against dRPC upstreams over
+            HTTP, and it skips the cache. See the{' '}
             <a className={ext} href="https://drpc.org/docs/gettingstarted/verification" target="_blank" rel="noopener noreferrer">verification guide</a> and the{' '}
             <a className={ext} href="https://github.com/drpcorg/nodecore" target="_blank" rel="noopener noreferrer">NodeCore repository</a>.
           </p>
