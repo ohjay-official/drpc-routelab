@@ -2,8 +2,8 @@
 module.exports = {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './lib/**/*.{ts,tsx}'],
   theme: {
-    // Square-ish corners only. There is deliberately no "full" radius.
-    borderRadius: { none: '0', DEFAULT: '2px', sm: '2px', md: '2px', lg: '2px' },
+    // Square corners across the app. xl and full exist only for the hero navbar and CTA.
+    borderRadius: { none: '0', DEFAULT: '2px', sm: '2px', md: '2px', lg: '2px', xl: '12px', full: '9999px' },
     extend: {
       colors: {
         paper: '#f3f1ec',

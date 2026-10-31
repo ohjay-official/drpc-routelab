@@ -1,7 +1,7 @@
 import Link from 'next/link'
+import HeroVideo from '@/components/HeroVideo'
 import LiveStrip from '@/components/LiveStrip'
 import Reveal from '@/components/Reveal'
-import { delay } from '@/lib/ui'
 
 const TOOLS = [
   {
@@ -42,33 +42,51 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="border-b border-rule">
-        <div className="mx-auto grid max-w-page grid-cols-1 gap-12 px-5 pb-14 pt-12 sm:px-8 sm:pb-20 sm:pt-20 lg:grid-cols-12 lg:gap-10">
-          <div className="min-w-0 lg:col-span-7">
-            <p className="rise label-mono">Tools for dRPC NodeCloud and NodeCore</p>
-            <h1
-              className="rise mt-5 text-4xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-[4.25rem]"
-              style={delay('.08s')}
-            >
-              Benchmark dRPC endpoints from your own browser.
-            </h1>
-            <p className="rise mt-6 max-w-xl text-base leading-relaxed text-mute sm:text-lg" style={delay('.18s')}>
-              RouteLab sends real JSON-RPC calls to dRPC’s public nodes, prices your request volume against NodeCloud and other
-              providers, and writes the NodeCore and viem configs for the setup you choose.
-            </p>
-            <div className="rise mt-9 flex flex-wrap gap-3" style={delay('.28s')}>
-              <Link href="/benchmark" className="btn btn-primary">
-                Run the benchmark
+      <section className="relative min-h-screen overflow-hidden bg-[#f0f0ee]" style={{ minHeight: '100svh' }}>
+        <HeroVideo />
+        <div className="relative z-10 flex min-h-screen flex-col" style={{ minHeight: '100svh' }}>
+          <div className="flex flex-1 items-end px-6 pb-10 pt-28 sm:px-12 sm:pb-16 md:px-20 lg:px-28 lg:pb-20">
+            <div className="max-w-xs">
+              <Link
+                href="/method"
+                className="group mb-3 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-blue-500 transition-colors hover:text-blue-600"
+              >
+                Independent tool, not affiliated with dRPC
+                <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
               </Link>
-              <Link href="/method" className="btn btn-ghost">
-                Read the method
+              <h1 className="mb-3 text-[1.5rem] font-medium leading-[1.15] tracking-tight text-gray-900 sm:text-[1.75rem]">
+                Benchmark dRPC endpoints from your own browser.
+              </h1>
+              <p className="mb-3 text-[13px] font-normal text-gray-400">Nothing leaves your device.</p>
+              <Link
+                href="/benchmark"
+                className="group inline-flex items-center gap-2 rounded-full border border-blue-400 px-5 py-2.5 text-[13px] font-medium text-blue-500 transition-all duration-200 hover:border-blue-500 hover:bg-blue-500 hover:text-white"
+              >
+                Run the benchmark
+                <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
               </Link>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="rise min-w-0 lg:col-span-5" style={delay('.36s')}>
+      {/* Live check */}
+      <section className="border-b border-rule">
+        <div className="mx-auto grid max-w-page grid-cols-1 gap-10 px-5 py-20 sm:px-8 lg:grid-cols-12">
+          <Reveal className="min-w-0 lg:col-span-6">
+            <p className="label-mono">Live check</p>
+            <h2 className="mt-3 max-w-md text-3xl font-semibold tracking-tight sm:text-4xl">Your connection to dRPC, right now.</h2>
+            <p className="mt-5 max-w-md leading-relaxed text-mute">
+              These are real calls from this browser to dRPC&rsquo;s public nodes. Each figure includes connection setup. The
+              benchmark page runs six timed calls per endpoint and adds p50, p95 and a failover verdict.
+            </p>
+            <Link href="/benchmark" className="btn btn-ghost mt-7">
+              Open the benchmark
+            </Link>
+          </Reveal>
+          <Reveal className="min-w-0 lg:col-span-6" d={0.08}>
             <LiveStrip />
-          </div>
+          </Reveal>
         </div>
       </section>
 
