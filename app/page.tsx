@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import ConfigPreview from '@/components/ConfigPreview'
 import CostPreview from '@/components/CostPreview'
+import DrpcMark from '@/components/DrpcMark'
 import HeroVideo from '@/components/HeroVideo'
 import LiveStrip from '@/components/LiveStrip'
 import Reveal from '@/components/Reveal'
+import Streaks from '@/components/Streaks'
 
 function Arrow() {
   return <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
@@ -49,6 +51,12 @@ export default function Home() {
       {/* Hero */}
       <section className="relative min-h-screen overflow-hidden bg-[#f0f0ee]" style={{ minHeight: '100svh' }}>
         <HeroVideo />
+        <Streaks />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-1/2"
+          style={{ background: 'radial-gradient(ellipse 58% 46% at 8% 100%, rgba(255,255,255,.88), rgba(255,255,255,0) 72%)' }}
+        />
         <div className="relative z-10 flex min-h-screen flex-col" style={{ minHeight: '100svh' }}>
           <div className="flex flex-1 items-end px-6 pb-10 pt-28 sm:px-12 sm:pb-16 md:px-20 lg:px-28 lg:pb-20">
             <div className="max-w-xs">
@@ -56,13 +64,14 @@ export default function Home() {
                 href="/method"
                 className="group mb-3 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-blue-500 transition-colors hover:text-blue-600"
               >
+                <DrpcMark size={13} />
                 Independent tool, not affiliated with dRPC
                 <Arrow />
               </Link>
               <h1 className="mb-3 text-[1.5rem] font-medium leading-[1.15] tracking-tight text-gray-900 sm:text-[1.75rem]">
                 Benchmark dRPC endpoints from your own browser.
               </h1>
-              <p className="mb-3 text-[13px] font-normal text-gray-400">Nothing leaves your device.</p>
+              <p className="mb-3 text-[13px] font-normal text-gray-600">Nothing leaves your device.</p>
               <Link
                 href="/benchmark"
                 className="group inline-flex items-center gap-2 rounded-full border border-blue-400 px-5 py-2.5 text-[13px] font-medium text-blue-500 transition-all duration-200 hover:border-blue-500 hover:bg-blue-500 hover:text-white"

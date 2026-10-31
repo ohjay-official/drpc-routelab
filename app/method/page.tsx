@@ -32,8 +32,7 @@ export default function MethodPage() {
         <Block title="Latency">
           <p>
             For each endpoint the page sends one <strong>warm-up call</strong> that is not counted, so DNS and TLS setup do not skew
-            the result. It then sends <strong>six timed calls in sequence</strong>. The call is <span className="code">eth_blockNumber</span> on
-            EVM chains and <span className="code">getSlot</span> on Solana.
+            the result. It then sends <strong>six timed calls in sequence</strong>. The call is <span className="code">eth_blockNumber</span>.
           </p>
           <p>
             p50 and p95 use the nearest-rank method on those six samples. With six samples, p95 is effectively the slowest call. Treat
@@ -46,7 +45,8 @@ export default function MethodPage() {
           </p>
           <p>
             The preloader and the home page strip use a single call per public endpoint with no warm-up, which is why those figures
-            are higher than the benchmark.
+            are higher than the benchmark. If an endpoint answers with a rate limit, they retry once after a short wait. The benchmark
+            never retries, so rate limits stay visible there.
           </p>
         </Block>
 
@@ -58,7 +58,7 @@ export default function MethodPage() {
           <p>
             Head lag is measured at the end of the run by asking your route and dRPC&rsquo;s public node for the same chain at the same
             moment. Stale means more than a per-chain tolerance, set to roughly six seconds of chain time: 2 blocks on Ethereum, 3 on
-            Base, Optimism and Polygon, 12 on BSC, 24 on Arbitrum and 15 slots on Solana. These tolerances are approximations, not
+            Base, Optimism and Polygon, 12 on BSC and 24 on Arbitrum. These tolerances are approximations, not
             protocol values.
           </p>
           <p>
@@ -78,12 +78,12 @@ export default function MethodPage() {
             Once a Pro or Scale pool is used, overage is charged from the account balance at $6 per 1M multi-chain requests. If the
             balance is empty and there is no overdraft, requests stop until funds are added, and a paid plan does not fall back to Free.
             The simulator picks the cheapest listed plan that fits your volume and peak RPS. The 100 RPS limit on Pay as You Go applies
-            to new accounts, and existing customers keep their current terms. Solana is billed at $3.9 per 1M requests and is not
-            modeled here, which is EVM only.
+            to new accounts, and existing customers keep their current terms. Pricing is for EVM chains. Solana is billed separately by dRPC
+            and is not modeled.
           </p>
           <p>
             <strong>Alchemy:</strong> $0.52 per 1M compute units, weighted by method. This tool uses 10 CU for eth_blockNumber, 26 CU for
-            eth_call and 60 CU for eth_getLogs, which gives $5.20, $13.52 and $31.20 per 1M requests.
+            eth_call and 75 CU for eth_getLogs, which gives $5.20, $13.52 and $39.00 per 1M requests.
           </p>
           <p>
             <strong>QuickNode:</strong> the Build plan overage rate of $0.62 per 1M API credits at 20 credits per call, or $12.40 per 1M
@@ -112,7 +112,7 @@ export default function MethodPage() {
           <p>
             The viem snippet uses the <a className={ext} href="https://viem.sh/docs/clients/transports/fallback" target="_blank" rel="noopener noreferrer">fallback transport</a> with
             ranking. Ranking pings each transport with eth_blockNumber instead of the default net_listening, because many public
-            endpoints do not answer net_listening well. Solana is not EVM, so it gets a commented @solana/web3.js line instead.
+            endpoints do not answer net_listening well.
           </p>
           <p>Generated files are starting points. Run them against a test key before they go near production.</p>
         </Block>
@@ -121,6 +121,10 @@ export default function MethodPage() {
           <p>
             It does not rank providers. A browser test measures your own network path at one moment, to one region of each service.
             For provider comparisons across regions over time, use a continuous monitoring dashboard.
+          </p>
+          <p>
+            It covers six EVM chains. dRPC&rsquo;s public Solana endpoint answers &ldquo;chain is not available on free plan&rdquo;, so
+            there is nothing public to test, and Solana is left out. The Free plan covers public nodes only.
           </p>
           <p>
             It does not store your RPC URLs, send them to a server, or keep results. Closing the tab clears everything. See the privacy

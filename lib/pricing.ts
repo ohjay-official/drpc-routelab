@@ -3,7 +3,7 @@ export const ALCHEMY_PER_M_CU = 0.52
 
 export const WORK = {
   read: { label: 'Standard read (eth_call)', alchemy: 26 * ALCHEMY_PER_M_CU, quicknode: 12.4, ankr: 20, alchemyNote: `26 CU per call at $${ALCHEMY_PER_M_CU} per 1M CU` },
-  logs: { label: 'Heavy indexing (eth_getLogs)', alchemy: 60 * ALCHEMY_PER_M_CU, quicknode: 12.4, ankr: 20, alchemyNote: `60 CU per call at $${ALCHEMY_PER_M_CU} per 1M CU` },
+  logs: { label: 'Heavy indexing (eth_getLogs)', alchemy: 75 * ALCHEMY_PER_M_CU, quicknode: 12.4, ankr: 20, alchemyNote: `75 CU per call at $${ALCHEMY_PER_M_CU} per 1M CU` },
   light: { label: 'Light read (eth_blockNumber)', alchemy: 10 * ALCHEMY_PER_M_CU, quicknode: 12.4, ankr: 20, alchemyNote: `10 CU per call at $${ALCHEMY_PER_M_CU} per 1M CU` },
 } as const
 export type WorkKey = keyof typeof WORK

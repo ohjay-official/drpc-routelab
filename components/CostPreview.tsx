@@ -1,3 +1,4 @@
+import DrpcMark from './DrpcMark'
 import { DRPC_PLANS, WORK, money, planCost } from '@/lib/pricing'
 
 // A worked example, computed from the same rates the simulator uses. Not a measurement.
@@ -23,11 +24,11 @@ export default function CostPreview() {
         {ROWS.map((r) => (
           <li key={r.name} className="border-b border-black/5 px-5 py-4 last:border-b-0">
             <div className="flex items-baseline justify-between">
-              <span className={`text-[13px] ${r.mine ? 'font-medium text-gray-900' : 'text-gray-700'}`}>{r.name}</span>
+              <span className={`flex items-center gap-2 text-[13px] ${r.mine ? 'font-medium text-gray-900' : 'text-gray-700'}`}>{r.mine && <DrpcMark size={13} />}{r.name}</span>
               <span className="text-[13px] tabular-nums text-gray-900">{money(r.cost)}/mo</span>
             </div>
             <div className="mt-2.5 h-1.5 rounded-full bg-gray-100">
-              <div className={`h-1.5 rounded-full ${r.mine ? 'bg-blue-500' : 'bg-gray-900'}`} style={{ width: `${(r.cost / max) * 100}%` }} />
+              <div className={`h-1.5 rounded-full ${r.mine ? 'bg-drpc' : 'bg-gray-900'}`} style={{ width: `${(r.cost / max) * 100}%` }} />
             </div>
           </li>
         ))}

@@ -2,8 +2,9 @@
 import { useMemo, useState } from 'react'
 import { CHAINS } from '@/lib/chains'
 import { SAMPLES, bench, ping, type Stat } from '@/lib/rpc'
+import DrpcMark from './DrpcMark'
 
-type Target = { id: string; label: string; sub: string; url: string; sol: boolean; custom: boolean }
+type Target = { id: string; label: string; sub: string; url: string; custom: boolean }
 
 const ms = (v: number | null) => (v === null ? 'n/a' : `${Math.round(v)} ms`)
 
@@ -42,9 +43,9 @@ export default function Benchmarker() {
 
   const targets: Target[] = useMemo(() => {
     const t: Target[] = []
-    if (hasPrimary) t.push({ id: 'primary', label: 'Your primary', sub: chain.label, url: primary.trim(), sol: chain.sol, custom: true })
-    if (hasBackup) t.push({ id: 'backup', label: 'Your backup', sub: chain.label, url: backup.trim(), sol: chain.sol, custom: true })
-    CHAINS.forEach((c) => t.push({ id: c.slug, label: c.label, sub: 'dRPC public', url: c.pub, sol: c.sol, custom: false }))
+    if (hasPrimary) t.push({ id: 'primary', label: 'Your primary', sub: chain.label, url: primary.trim(), custom: true })
+    if (hasBackup) t.push({ id: 'backup', label: 'Your backup', sub: chain.label, url: backup.trim(), custom: true })
+    CHAINS.forEach((c) => t.push({ id: c.slug, label: c.label, sub: 'dRPC public', url: c.pub, custom: false }))
     return t
   }, [primary, backup, hasPrimary, hasBackup, chain])
 
@@ -60,14 +61,14 @@ export default function Benchmarker() {
     setLags({})
     await Promise.all(
       targets.map(async (t) => {
-        const s = await bench(t.url, t.sol)
+        const s = await bench(t.url)
         setRes((prev) => ({ ...prev, [t.id]: s }))
       }),
     )
     // Head comparison: ask your routes and dRPC's public node for the same chain at the same moment.
     const mine = targets.filter((t) => t.custom)
     if (mine.length) {
-      const [ref, ...others] = await Promise.all([ping(chain.pub, chain.sol), ...mine.map((t) => ping(t.url, t.sol))])
+      const [ref, ...others] = await Promise.all([ping(chain.pub), ...mine.map((t) => ping(t.url))])
       const next: Record<string, number | null> = {}
       mine.forEach((t, i) => {
         const o = others[i]
@@ -91,14 +92,14 @@ export default function Benchmarker() {
     const slow = pStat.p50 === null || pStat.p50 > threshold
     const behind = stale(pLag)
     if (!slow && !behind) {
-      verdict = { tone: 'ok', head: 'Primary passed', body: `p50 ${ms(pStat.p50)} is within the ${threshold} ms threshold${hasPrimary ? ` and the head is within ${chain.lagTol} ${chain.unit} of dRPC public` : ''}.` }
+      verdict = { tone: 'ok', head: 'Primary passed', body: `p50 ${ms(pStat.p50)} is within the ${threshold} ms threshold${hasPrimary ? ` and the head is within ${chain.lagTol} blocks of dRPC public` : ''}.` }
     } else {
       const why =
         pStat.p50 === null
           ? `did not respond (${pStat.err})`
           : slow
             ? `p50 ${ms(pStat.p50)} is over the ${threshold} ms threshold`
-            : `is ${pLag} ${chain.unit} behind dRPC public`
+            : `is ${pLag} blocks behind dRPC public`
       const bOk = hasBackup && bStat && bStat.p50 !== null && !stale(bLag)
       verdict = bOk
         ? { tone: 'warn', head: 'Failover triggered', body: `Primary ${why}. Traffic would move to your backup (p50 ${ms(bStat!.p50)}).` }
@@ -164,8 +165,9 @@ export default function Benchmarker() {
         )}
 
         <div className="mb-3 flex flex-wrap items-center gap-x-5 gap-y-1 px-1 text-[11px] text-gray-400">
-          <span className="inline-flex items-center gap-2"><span className="inline-block h-1.5 w-4 rounded-full bg-gray-900" />p50</span>
-          <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-0.5 bg-blue-500" />p95</span>
+          <span className="inline-flex items-center gap-2"><span className="inline-block h-1.5 w-4 rounded-full bg-drpc" />dRPC public p50</span>
+          <span className="inline-flex items-center gap-2"><span className="inline-block h-1.5 w-4 rounded-full bg-blue-500" />your route p50</span>
+          <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-0.5 bg-gray-900" />p95</span>
           <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-0 border-l border-dashed border-gray-400" />threshold</span>
         </div>
 
@@ -174,12 +176,15 @@ export default function Benchmarker() {
             const s = res[t.id]
             const lag = t.custom ? lags[t.id] : undefined
             const lagBad = stale(lag)
-            const unit = t.sol ? 'slots' : 'blk'
             return (
               <li key={t.id} className="p-5">
                 <div className="flex items-baseline justify-between gap-4">
                   <p className="text-[14px] font-medium text-gray-900">
-                    {t.label} <span className="ml-1 text-[12px] font-normal text-gray-400">{t.sub}</span>
+                    {t.label}{' '}
+                    <span className="ml-1 inline-flex items-center gap-1.5 text-[12px] font-normal text-gray-400">
+                      {!t.custom && <DrpcMark size={11} />}
+                      {t.sub}
+                    </span>
                   </p>
                   {s && s.fails > 0 && (
                     <p className="text-right text-[12px] text-bad" title={s.detail ?? undefined}>
@@ -189,10 +194,10 @@ export default function Benchmarker() {
                 </div>
                 <div className="relative mt-4 h-2 rounded-full bg-gray-100">
                   {s && s.p50 !== null && (
-                    <span className={`bar-grow absolute inset-y-0 left-0 rounded-full ${t.custom ? 'bg-blue-500' : 'bg-gray-900'}`} style={{ width: `${Math.min(100, (s.p50 / scaleMax) * 100)}%` }} />
+                    <span className={`bar-grow absolute inset-y-0 left-0 rounded-full ${t.custom ? 'bg-blue-500' : 'bg-drpc'}`} style={{ width: `${Math.min(100, (s.p50 / scaleMax) * 100)}%` }} />
                   )}
                   {s && s.p95 !== null && (
-                    <span className="absolute -inset-y-1 w-0.5 bg-blue-500" style={{ left: `${Math.min(99.5, (s.p95 / scaleMax) * 100)}%` }} />
+                    <span className="absolute -inset-y-1 w-0.5 bg-gray-900" style={{ left: `${Math.min(99.5, (s.p95 / scaleMax) * 100)}%` }} />
                   )}
                   <span className="absolute -inset-y-2 w-0 border-l border-dashed border-gray-400" style={{ left: `${Math.min(100, (threshold / scaleMax) * 100)}%` }} />
                 </div>
@@ -200,7 +205,7 @@ export default function Benchmarker() {
                   <Cell k="p50" v={s ? ms(s.p50) : running ? '...' : '-'} />
                   <Cell k="p95" v={s ? ms(s.p95) : running ? '...' : '-'} />
                   <Cell k="Head" v={s && s.block !== null ? s.block.toLocaleString() : running ? '...' : '-'} />
-                  <Cell k="Lag" v={t.custom ? (lag === undefined ? (running ? '...' : '-') : lag === null ? 'n/a' : `${lag} ${unit}`) : 'ref'} tone={lagBad ? '!text-bad' : ''} />
+                  <Cell k="Lag" v={t.custom ? (lag === undefined ? (running ? '...' : '-') : lag === null ? 'n/a' : `${lag} blk`) : 'ref'} tone={lagBad ? '!text-bad' : ''} />
                   <Cell k="Failed" v={s ? `${s.fails}/${SAMPLES}` : '-'} tone={s && s.fails ? '!text-bad' : ''} />
                 </div>
               </li>

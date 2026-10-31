@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
+import DrpcMark from './DrpcMark'
 import { CU_PER_REQUEST, DRPC_PLANS, ENTERPRISE_FROM, MAX_PLAN_RPS, WORK, money, planCost, planFits, type WorkKey } from '@/lib/pricing'
 
 export default function CostSim() {
@@ -93,11 +94,11 @@ export default function CostSim() {
           {rows.map((r) => (
             <li key={r.id} className="p-5">
               <div className="flex items-baseline justify-between gap-4">
-                <p className={`text-[14px] ${r.mine ? 'font-medium text-gray-900' : 'text-gray-700'}`}>{r.name}</p>
+                <p className={`flex items-center gap-2 text-[14px] ${r.mine ? 'font-medium text-gray-900' : 'text-gray-700'}`}>{r.mine && <DrpcMark size={14} />}{r.name}</p>
                 <p className={`text-[13px] tabular-nums ${r.ok ? 'text-gray-900' : 'text-bad'}`}>{r.ok ? `${r.from ? 'from ' : ''}${money(r.cost)}/mo` : 'Does not fit'}</p>
               </div>
               <div className="mt-3 h-2 rounded-full bg-gray-100">
-                <div className={`bar-grow h-2 rounded-full ${r.mine ? 'bg-blue-500' : 'bg-gray-900'}`} style={{ width: `${r.ok ? (r.cost / max) * 100 : 0}%` }} />
+                <div className={`bar-grow h-2 rounded-full ${r.mine ? 'bg-drpc' : 'bg-gray-900'}`} style={{ width: `${r.ok ? (r.cost / max) * 100 : 0}%` }} />
               </div>
               <p className={`mt-2 text-[12px] ${r.ok ? 'text-gray-400' : 'text-bad'}`}>{r.note}</p>
             </li>

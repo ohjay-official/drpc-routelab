@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import { CHAINS } from '@/lib/chains'
 import { scan } from '@/lib/rpc'
 import { useScan } from '@/lib/useScan'
-import Logo from './Logo'
+import Count from './Count'
+import DrpcMark from './DrpcMark'
 
 export default function Preloader() {
   const res = useScan()
@@ -53,9 +54,7 @@ export default function Preloader() {
       aria-live="polite"
       aria-label="Loading RouteLab"
     >
-      <div className="flex h-11 w-11 items-center justify-center rounded-full" style={{ backgroundColor: '#EDEDED' }}>
-        <Logo />
-      </div>
+      <DrpcMark size={72} tile build />
       <p className="mt-5 text-[13px] text-gray-500">Pinging dRPC public nodes</p>
       <ul className="mt-6 w-full max-w-xs text-[13px]">
         {CHAINS.map((c) => {
@@ -63,19 +62,24 @@ export default function Preloader() {
           return (
             <li key={c.slug} className="flex justify-between border-b border-black/5 py-2 last:border-b-0">
               <span className="text-gray-900">{c.label}</span>
-              <span className={`tabular-nums ${r ? (r.ms === null ? 'text-bad' : 'text-gray-900') : 'text-gray-400'}`}>
-                {r ? (r.ms === null ? r.err : `${Math.round(r.ms)} ms`) : '...'}
-              </span>
+              {r ? (
+                <span className={`row-in tabular-nums ${r.ms === null ? 'text-bad' : 'text-gray-900'}`}>
+                  {r.ms === null ? r.err : (<><Count to={r.ms} /> ms</>)}
+                </span>
+              ) : (
+                <span className="tabular-nums text-gray-400">...</span>
+              )}
             </li>
           )
         })}
       </ul>
       <div className="mt-6 h-1 w-full max-w-xs overflow-hidden rounded-full bg-black/10">
-        <div className="bar-grow h-1 rounded-full bg-blue-500" style={{ width: `${(done / total) * 100}%` }} />
+        <div className="bar-grow h-1 rounded-full bg-drpc" style={{ width: `${(done / total) * 100}%` }} />
       </div>
       <p className="mt-3 text-[12px] tabular-nums text-gray-400">
         {done} of {total}
       </p>
+      <p className="mt-10 text-[12px] text-gray-400">RouteLab, an independent tool. Not affiliated with dRPC.</p>
     </div>
   )
 }

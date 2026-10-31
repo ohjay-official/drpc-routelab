@@ -17,7 +17,7 @@ export default function Generator() {
   const [tab, setTab] = useState<Tab>('yml')
 
   const chains = CHAINS.filter((c) => sel.includes(c.slug))
-  const evm = chains.filter((c) => c.viem)
+  const evm = chains
   const toggle = (s: string) => setSel((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))
   const bk = backup.trim()
 
@@ -37,7 +37,7 @@ export default function Generator() {
   const run = useMemo(() => {
     const first = chains[0]
     const slug = first ? first.slug : 'ethereum'
-    const method = first && first.sol ? 'getSlot' : 'eth_blockNumber'
+    const method = 'eth_blockNumber'
     const body = `-d '{"jsonrpc":"2.0","id":1,"method":"${method}","params":[]}'`
     const lines = [
       '# 1. Put your dRPC key in the environment',
@@ -99,10 +99,6 @@ export default function Generator() {
     const head = ['// viem-transport.ts', "import { createPublicClient, fallback, http } from 'viem'"]
     if (imp) head.push(`import { ${imp} } from 'viem/chains'`)
     let out = head.join('\n') + '\n\n' + (blocks.length ? blocks.join('\n\n') : '// Select at least one EVM chain')
-    if (sel.includes('solana')) {
-      out +=
-        "\n\n// Solana is not EVM, so viem cannot use it. Use @solana/web3.js instead:\n// import { Connection } from '@solana/web3.js'\n// export const solana = new Connection(`https://lb.drpc.live/solana/${process.env.DRPC_KEY}`)"
-    }
     return out + '\n'
   }, [sel, bk])
 
