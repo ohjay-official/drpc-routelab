@@ -128,7 +128,7 @@ export default function Generator() {
             <p className="mt-2 text-[12px] text-gray-400">Added as a second upstream for the first chain you selected.</p>
           </div>
           <label className="flex items-start gap-3 text-[13px] text-gray-900">
-            <input type="checkbox" className="mt-0.5 h-4 w-4 accent-blue-500" checked={quorum} onChange={(e) => setQuorum(e.target.checked)} />
+            <input type="checkbox" className="mt-0.5 h-4 w-4 accent-brand-deep" checked={quorum} onChange={(e) => setQuorum(e.target.checked)} />
             <span>Include the quorum verification request</span>
           </label>
           <p className="text-[12px] leading-relaxed text-gray-400">
@@ -148,7 +148,7 @@ export default function Generator() {
                 role="tab"
                 aria-selected={tab === t.id}
                 onClick={() => setTab(t.id)}
-                className={`-mb-px whitespace-nowrap border-b-2 pb-3 text-[13px] ${tab === t.id ? 'border-blue-500 font-medium text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-900'}`}
+                className={`-mb-px whitespace-nowrap border-b-2 pb-3 text-[13px] ${tab === t.id ? 'border-brand-deep font-medium text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-900'}`}
               >
                 {t.label}
               </button>

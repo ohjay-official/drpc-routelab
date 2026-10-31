@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import DrpcMark from './DrpcMark'
 
 const a = 'text-[13px] text-gray-500 transition-colors hover:text-gray-900'
 const ext = { target: '_blank', rel: 'noopener noreferrer' } as const
@@ -20,6 +21,10 @@ export default function Footer() {
           <p className="text-[15px] font-medium text-gray-900">RouteLab</p>
           <p className="mt-2 max-w-xs text-[13px] leading-relaxed text-gray-500">
             An independent community project. It is not made by, affiliated with, or endorsed by dRPC.
+          </p>
+          <p className="mt-4 flex items-center gap-2 text-[12px] text-gray-400">
+            <DrpcMark size={20} />
+            dRPC and its logo belong to dRPC.
           </p>
         </div>
         <div className="md:col-span-2">

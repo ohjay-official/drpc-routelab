@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'How RouteLab measures latency, prices traffic and builds configs, and what it does not do.',
 }
 
-const ext = 'text-blue-500 underline underline-offset-4 hover:text-blue-600'
+const ext = 'text-brand-ink underline underline-offset-4 hover:text-brand-hover'
 
 function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (

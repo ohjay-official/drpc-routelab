@@ -14,7 +14,7 @@ const ROWS = [
 export default function CostPreview() {
   const max = Math.max(...ROWS.map((r) => r.cost))
   return (
-    <div className="card overflow-hidden">
+    <div className="card lift overflow-hidden">
       <div className="px-5 py-4">
         <p className="text-[13px] font-medium text-gray-900">Example: {VOL}M eth_getLogs requests a month</p>
         <p className="mt-0.5 text-[12px] text-gray-400">Worked from list rates with dRPC Pro, not a live quote</p>
@@ -27,7 +27,7 @@ export default function CostPreview() {
               <span className="text-[13px] tabular-nums text-gray-900">{money(r.cost)}/mo</span>
             </div>
             <div className="mt-2.5 h-1.5 rounded-full bg-gray-100">
-              <div className={`h-1.5 rounded-full ${r.mine ? 'bg-blue-500' : 'bg-gray-900'}`} style={{ width: `${(r.cost / max) * 100}%` }} />
+              <div className={`h-1.5 rounded-full ${r.mine ? 'bg-brand-deep' : 'bg-gray-900'}`} style={{ width: `${(r.cost / max) * 100}%` }} />
             </div>
           </li>
         ))}

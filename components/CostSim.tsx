@@ -97,7 +97,7 @@ export default function CostSim() {
                 <p className={`text-[13px] tabular-nums ${r.ok ? 'text-gray-900' : 'text-bad'}`}>{r.ok ? `${r.from ? 'from ' : ''}${money(r.cost)}/mo` : 'Does not fit'}</p>
               </div>
               <div className="mt-3 h-2 rounded-full bg-gray-100">
-                <div className={`bar-grow h-2 rounded-full ${r.mine ? 'bg-blue-500' : 'bg-gray-900'}`} style={{ width: `${r.ok ? (r.cost / max) * 100 : 0}%` }} />
+                <div className={`bar-grow h-2 rounded-full ${r.mine ? 'bg-brand-deep' : 'bg-gray-900'}`} style={{ width: `${r.ok ? (r.cost / max) * 100 : 0}%` }} />
               </div>
               <p className={`mt-2 text-[12px] ${r.ok ? 'text-gray-400' : 'text-bad'}`}>{r.note}</p>
             </li>
@@ -107,7 +107,7 @@ export default function CostSim() {
         <p className="mt-5 px-1 text-[12px] leading-relaxed text-gray-400">
           Competitor rates are published figures as reported for October 2026, converted to cost per request for the workload you
           picked. Competitor free allowances and subscription fees are not modeled. Confirm every rate on the vendor&rsquo;s own pricing page. The{' '}
-          <Link href="/method" className="text-blue-500 underline underline-offset-4 hover:text-blue-600">method page</Link> lists the basis for each rate.
+          <Link href="/method" className="text-brand-ink underline underline-offset-4 hover:text-brand-hover">method page</Link> lists the basis for each rate.
         </p>
       </div>
     </div>

@@ -32,9 +32,10 @@ export default function Header() {
               key={n.href}
               href={n.href}
               aria-current={path === n.href ? 'page' : undefined}
-              className={`text-[12px] font-medium transition-colors duration-200 hover:text-gray-900 sm:text-[14px] ${path === n.href ? 'text-gray-900' : 'text-gray-700'}`}
+              className={`relative text-[12px] font-medium transition-colors duration-200 hover:text-gray-900 sm:text-[14px] ${path === n.href ? 'text-gray-900' : 'text-gray-700'}`}
             >
               {n.label}
+              {path === n.href && <span key={path} className="dot-in absolute -bottom-1.5 left-1/2 h-1 w-1 rounded-full bg-brand-deep" aria-hidden="true" />}
             </Link>
           ))}
         </div>

@@ -165,7 +165,7 @@ export default function Benchmarker() {
 
         <div className="mb-3 flex flex-wrap items-center gap-x-5 gap-y-1 px-1 text-[11px] text-gray-400">
           <span className="inline-flex items-center gap-2"><span className="inline-block h-1.5 w-4 rounded-full bg-gray-900" />p50</span>
-          <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-0.5 bg-blue-500" />p95</span>
+          <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-0.5 bg-brand-deep" />p95</span>
           <span className="inline-flex items-center gap-2"><span className="inline-block h-3 w-0 border-l border-dashed border-gray-400" />threshold</span>
         </div>
 
@@ -189,10 +189,10 @@ export default function Benchmarker() {
                 </div>
                 <div className="relative mt-4 h-2 rounded-full bg-gray-100">
                   {s && s.p50 !== null && (
-                    <span className={`bar-grow absolute inset-y-0 left-0 rounded-full ${t.custom ? 'bg-blue-500' : 'bg-gray-900'}`} style={{ width: `${Math.min(100, (s.p50 / scaleMax) * 100)}%` }} />
+                    <span className={`bar-grow absolute inset-y-0 left-0 rounded-full ${t.custom ? 'bg-brand-deep' : 'bg-gray-900'}`} style={{ width: `${Math.min(100, (s.p50 / scaleMax) * 100)}%` }} />
                   )}
                   {s && s.p95 !== null && (
-                    <span className="absolute -inset-y-1 w-0.5 bg-blue-500" style={{ left: `${Math.min(99.5, (s.p95 / scaleMax) * 100)}%` }} />
+                    <span className="absolute -inset-y-1 w-0.5 bg-brand-deep" style={{ left: `${Math.min(99.5, (s.p95 / scaleMax) * 100)}%` }} />
                   )}
                   <span className="absolute -inset-y-2 w-0 border-l border-dashed border-gray-400" style={{ left: `${Math.min(100, (threshold / scaleMax) * 100)}%` }} />
                 </div>

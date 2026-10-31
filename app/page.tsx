@@ -4,6 +4,7 @@ import CostPreview from '@/components/CostPreview'
 import HeroVideo from '@/components/HeroVideo'
 import LiveStrip from '@/components/LiveStrip'
 import Reveal from '@/components/Reveal'
+import Streaks from '@/components/Streaks'
 
 function Arrow() {
   return <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
@@ -30,7 +31,7 @@ function Feature({
         <Reveal className={`min-w-0 lg:col-span-5 ${flip ? 'lg:order-2' : ''}`}>
           <h2 className="text-[1.5rem] font-medium leading-[1.15] tracking-tight text-gray-900 sm:text-[1.75rem]">{title}</h2>
           <p className="mt-3 max-w-sm text-[14px] leading-relaxed text-gray-500">{body}</p>
-          <Link href={href} className="group mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-blue-500 transition-colors hover:text-blue-600">
+          <Link href={href} className="group mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-brand-ink transition-colors hover:text-brand-hover">
             {cta}
             <Arrow />
           </Link>
@@ -54,7 +55,7 @@ export default function Home() {
             <div className="max-w-xs">
               <Link
                 href="/method"
-                className="group mb-3 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-blue-500 transition-colors hover:text-blue-600"
+                className="group mb-3 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-brand-ink transition-colors hover:text-brand-hover"
               >
                 Independent tool, not affiliated with dRPC
                 <Arrow />
@@ -65,7 +66,7 @@ export default function Home() {
               <p className="mb-3 text-[13px] font-normal text-gray-400">Nothing leaves your device.</p>
               <Link
                 href="/benchmark"
-                className="group inline-flex items-center gap-2 rounded-full border border-blue-400 px-5 py-2.5 text-[13px] font-medium text-blue-500 transition-all duration-200 hover:border-blue-500 hover:bg-blue-500 hover:text-white"
+                className="group inline-flex items-center gap-2 rounded-full border border-brand-deep px-5 py-2.5 text-[13px] font-medium text-brand-ink transition-all duration-200 hover:border-brand hover:bg-brand hover:text-gray-900"
               >
                 Run the benchmark
                 <Arrow />
@@ -75,7 +76,8 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="pt-8 sm:pt-12">
+      <div className="relative overflow-hidden pt-8 sm:pt-12">
+        <Streaks />
         <Feature
           title="Test your connection to dRPC."
           body="Real calls from this browser to dRPC's public nodes, with a full benchmark that adds p50, p95 and a failover verdict against your own routes."
@@ -110,7 +112,7 @@ export default function Home() {
               <p className="max-w-2xl text-[13px] leading-relaxed text-gray-500">
                 Latency figures describe your own network path at the moment you run a test, and prices are published list rates as
                 reported for October 2026. Neither is a ranking of providers.{' '}
-                <Link href="/method" className="group inline-flex items-center gap-1 font-medium text-blue-500 hover:text-blue-600">
+                <Link href="/method" className="group inline-flex items-center gap-1 font-medium text-brand-ink hover:text-brand-hover">
                   How each number is produced
                   <Arrow />
                 </Link>
